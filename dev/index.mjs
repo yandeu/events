@@ -1,4 +1,4 @@
-import { Events } from '../esm/index.js'
+import { Events } from '../esm/index.mjs'
 
 const events = new Events()
 

@@ -2,12 +2,9 @@
   "name": "@yandeu/events",
   "version": "0.0.1",
   "description": "Simplified and TypeScripted version of EventEmitter3@4.0.7",
-  "type": "module",
+  "type": "commonjs",
   "main": "./cjs/index.js",
-  "exports": {
-    "import": "./cjs/index.js",
-    "require": "./esm/index.js"
-  },
+  "types": "./cjs/index.d.ts",
   "author": "Yannick Deubel (https://github.com/yandeu)",
   "license": "MIT",
   "homepage": "https://github.com/yandeu/events#readme",
@@ -27,7 +24,7 @@
     "dev": "npm run build && npm-run-all --parallel dev:*",
     "dev:tsc-cjs": "tsc --project tsconfig.cjs.json --watch",
     "dev:tsc-esm": "tsc --project tsconfig.esm.json --watch",
-    "build": "npm-run-all build:*",
+    "build": "npm-run-all build:* && node scripts/rename.cjs",
     "build:tsc-cjs": "tsc --project tsconfig.cjs.json",
     "build:tsc-esm": "tsc --project tsconfig.esm.json",
     "build:webpack": "webpack --config webpack.config.cjs",

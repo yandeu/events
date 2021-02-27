@@ -1,0 +1,6 @@
+.github/
+coverage/
+dev/
+node_modules/
+src/
+test/

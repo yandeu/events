@@ -2,7 +2,7 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = [
-  { filename: 'events.min.js', configFile: 'tsconfig.esm.json' },
+  { filename: 'events.min.js', configFile: 'tsconfig.json' },
   { filename: 'events.es5.min.js', configFile: 'tsconfig.cjs.json' }
 ].map(config => {
   return {

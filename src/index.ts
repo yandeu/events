@@ -49,7 +49,7 @@ const clearEvent = (emitter: Events<any>, event: any) => {
   else emitter._events.delete(event)
 }
 
-export class Events<EventMap extends ValidEventMap> {
+export class Events<EventMap extends ValidEventMap = any> {
   _events: Map<EventNames<EventMap>, any> = new Map()
   _eventsCount = 0
 

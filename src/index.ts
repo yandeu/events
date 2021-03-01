@@ -8,15 +8,15 @@
  * @license      {@link https://github.com/yandeu/events/blob/master/LICENSE|MIT}
  */
 
-type ValidEventMap<T = any> = T extends {
+export type ValidEventMap<T = any> = T extends {
   [P in keyof T]: (...args: any[]) => void
 }
   ? T
   : never
 
-type Handler<T extends Object | ((...args: any[]) => R), R = any> = T
+export type Handler<T extends Object | ((...args: any[]) => R), R = any> = T
 
-type EventListener<T extends ValidEventMap, K extends EventNames<T>> = T extends string | symbol
+export type EventListener<T extends ValidEventMap, K extends EventNames<T>> = T extends string | symbol
   ? (...args: any[]) => void
   : K extends keyof T
   ? Handler<T[K], void>
@@ -30,7 +30,7 @@ class EE {
   constructor(public fn: any, public context: any, public once = false) {}
 }
 
-function addListener(emitter: Events<any>, event: any, fn: any, context: any, once: any) {
+const addListener = (emitter: Events<any>, event: any, fn: any, context: any, once: any) => {
   if (typeof fn !== 'function') {
     throw new TypeError('The listener must be a function')
   }
@@ -107,7 +107,7 @@ export class Events<EventMap extends ValidEventMap = any> {
     return addListener(this, event, fn, context, true)
   }
 
-  removeListener<T extends EventNames<EventMap>>(
+  public removeListener<T extends EventNames<EventMap>>(
     event: T,
     fn?: EventListener<EventMap, T>,
     context?: any,
@@ -140,7 +140,7 @@ export class Events<EventMap extends ValidEventMap = any> {
     return this
   }
 
-  removeAllListeners(event?: EventNames<EventMap>) {
+  public removeAllListeners(event?: EventNames<EventMap>) {
     if (event) {
       if (this._events.delete(event)) clearEvent(this, event)
     } else {
@@ -152,12 +152,12 @@ export class Events<EventMap extends ValidEventMap = any> {
   }
 
   // alias
-  get off() {
+  public get off() {
     return this.removeListener
   }
 
   // alias
-  get addListener() {
+  public get addListener() {
     return this.on
   }
 }
@@ -174,9 +174,15 @@ export class Events<EventMap extends ValidEventMap = any> {
 
 // const test = new Events<EventMap>()
 
-// test.on('something', (a, b, c) => {
+// const listener: EventListener<EventMap, 'something'> = (a, b, c) => {
 //   console.log(a, b.colors, c)
-// })
+// }
+
+// test.on('something', listener)
+
+// setTimeout(() => {
+//   test.removeListener('something', listener)
+// }, 5000)
 
 // test.once('error', err => {
 //   console.log('error:', err)

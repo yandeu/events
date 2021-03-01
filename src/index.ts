@@ -8,14 +8,6 @@
  * @license      {@link https://github.com/yandeu/events/blob/master/LICENSE|MIT}
  */
 
-const a = {}
-
-interface EventMap {
-  signal: () => void
-  error: (err: string) => void
-  something: (a: number, b: { hello: string }, c: [number, number, string]) => void
-}
-
 type ValidEventMap<T = any> = T extends {
   [P in keyof T]: (...args: any[]) => void
 }
@@ -170,20 +162,28 @@ export class Events<EventMap extends ValidEventMap> {
   }
 }
 
-const events = new Events<EventMap>()
+/** TESTING SECTION */
 
-events.on('something', (a, b, c) => {
-  console.log(a)
-})
+// type Colors = 'red' | 'blue' | 'yellow'
 
-events.once('error', s => {
-  console.log('error', s)
-})
+// interface EventMap {
+//   signal: () => void
+//   error: (err: string) => void
+//   something: (a: number, b: { colors?: Colors[] }, c: [number, number, string]) => void
+// }
 
-console.log(events.eventNames())
+// const test = new Events<EventMap>()
 
-events.emit('error', 'asfd')
+// test.on('something', (a, b, c) => {
+//   console.log(a, b.colors, c)
+// })
 
-events.emit('error', 'asfdasf')
+// test.once('error', err => {
+//   console.log('error:', err)
+// })
 
-events.emit('something', 5874, { hello: 'sdf' }, [3, 3, 'k'])
+// console.log(test.eventNames())
+
+// test.emit('error', 'ok')
+// test.emit('error', 'failed')
+// test.emit('something', 1234, { colors: ['blue'] }, [3, 3, 'k'])

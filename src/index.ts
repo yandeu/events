@@ -22,9 +22,9 @@ type EventListener<T extends ValidEventMap, K extends EventNames<T>> = T extends
   ? Handler<T[K], void>
   : never
 
-type EventArgs<T extends ValidEventMap, K extends EventNames<T>> = Parameters<EventListener<T, K>>
+export type EventArgs<T extends ValidEventMap, K extends EventNames<T>> = Parameters<EventListener<T, K>>
 
-type EventNames<T extends ValidEventMap> = T extends string | symbol ? T : keyof T
+export type EventNames<T extends ValidEventMap> = T extends string | symbol ? T : keyof T
 
 class EE {
   constructor(public fn: any, public context: any, public once = false) {}

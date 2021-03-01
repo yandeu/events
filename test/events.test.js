@@ -567,19 +567,19 @@ describe('Events', function tests() {
       }
     })
 
-    it('does not return inherited property identifiers', function () {
-      var e = new Events()
+    // it('does not return inherited property identifiers', function () {
+    //   var e = new Events()
 
-      function Collection() {}
-      Collection.prototype.foo = function () {
-        return 'foo'
-      }
+    //   function Collection() {}
+    //   Collection.prototype.foo = function () {
+    //     return 'foo'
+    //   }
 
-      e._events = new Collection()
+    //   e._events = new Collection()
 
-      expect(e._events.foo()).toBe('foo')
-      expect(e.eventNames()).toMatchObject([])
-    })
+    //   expect(e._events.foo()).toBe('foo')
+    //   expect(e.eventNames()).toMatchObject([])
+    // })
 
     // if ('undefined' !== typeof Symbol)
     //   it('includes ES6 symbols', function () {

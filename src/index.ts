@@ -8,68 +8,57 @@
  * @license      {@link https://github.com/yandeu/events/blob/master/LICENSE|MIT}
  */
 
-export type Context = any
-export type Once = boolean
-export type EventTypes = string
-export type EventName = string
-export type EventArg = any
-
-const has = Object.prototype.hasOwnProperty
-const prefix = '~'
-
-interface _Events {
-  [key: string]: any
+type ValidEventMap<T = any> = T extends {
+  [P in keyof T]: (...args: any[]) => void
 }
+  ? T
+  : never
 
-class _Events {}
+type Handler<T extends Object | ((...args: any[]) => R), R = any> = T
+
+type EventListener<T extends ValidEventMap, K extends EventNames<T>> = T extends string | symbol
+  ? (...args: any[]) => void
+  : K extends keyof T
+  ? Handler<T[K], void>
+  : never
+
+type EventArgs<T extends ValidEventMap, K extends EventNames<T>> = Parameters<EventListener<T, K>>
+
+type EventNames<T extends ValidEventMap> = T extends string | symbol ? T : keyof T
 
 class EE {
-  constructor(public fn: Function, public context: Context, public once: Once = false) {}
+  constructor(public fn: any, public context: any, public once = false) {}
 }
 
-const addListener = (emitter: Events, event: EventName, fn: Function, context: Context, once: Once): Events => {
+function addListener(emitter: Events<any>, event: any, fn: any, context: any, once: any) {
   if (typeof fn !== 'function') {
     throw new TypeError('The listener must be a function')
   }
 
   const listener = new EE(fn, context || emitter, once)
-  const evt = prefix ? prefix + event : event
 
-  if (!emitter._events[evt]) (emitter._events[evt] = listener), emitter._eventsCount++
-  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener)
-  else emitter._events[evt] = [emitter._events[evt], listener]
+  if (!emitter._events.has(event)) emitter._events.set(event, listener), emitter._eventsCount++
+  else if (!emitter._events.get(event).fn) emitter._events.get(event).push(listener)
+  else emitter._events.set(event, [emitter._events.get(event), listener])
 
   return emitter
 }
 
-const clearEvent = (emitter: Events, evt: string) => {
-  if (--emitter._eventsCount === 0) emitter._events = new _Events()
-  else delete emitter._events[evt]
+const clearEvent = (emitter: Events<any>, event: any) => {
+  if (--emitter._eventsCount === 0) emitter._events = new Map()
+  else emitter._events.delete(event)
 }
 
-export class Events {
-  public prefixed: string = prefix
+export class Events<EventMap extends ValidEventMap = any> {
+  _events: Map<EventNames<EventMap>, any> = new Map()
+  _eventsCount = 0
 
-  public _events: _Events = new _Events()
-  public _eventsCount: number = 0
-
-  eventNames(): EventName[] {
-    let names: EventName[] = []
-    let events: _Events
-    let name: EventName
-
-    if (this._eventsCount === 0) return names
-
-    for (name in (events = this._events)) {
-      if (has.call(events, name)) names.push(prefix ? name.slice(1) : name)
-    }
-
-    return names
+  public eventNames() {
+    return Array.from(this._events.keys())
   }
 
-  listeners(event: EventName) {
-    const evt = prefix ? prefix + event : event
-    const handlers = this._events[evt]
+  public listeners(event: EventNames<EventMap>) {
+    const handlers = this._events.get(event)
 
     if (!handlers) return []
     if (handlers.fn) return [handlers.fn]
@@ -81,33 +70,28 @@ export class Events {
     return ee
   }
 
-  listenerCount(event: EventName): number {
-    let evt = prefix ? prefix + event : event,
-      listeners = this._events[evt]
+  public listenerCount(event: EventNames<EventMap>) {
+    let listeners = this._events.get(event)
 
     if (!listeners) return 0
     if (listeners.fn) return 1
     return listeners.length
   }
 
-  emit(event: EventName, ...args: EventArg[]): boolean {
-    let evt = prefix ? prefix + event : event
+  public emit<T extends EventNames<EventMap>>(event: T, ...args: EventArgs<EventMap, T>) {
+    if (!this._events.has(event)) return false
 
-    if (!this._events[evt]) return false
-
-    let listeners = this._events[evt]
+    let listeners = this._events.get(event)
     let i
 
     if (listeners.fn) {
       if (listeners.once) this.removeListener(event, listeners.fn, undefined, true)
-
       return listeners.fn.call(listeners.context, ...args), true
     } else {
       let length = listeners.length
 
       for (i = 0; i < length; i++) {
         if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true)
-
         listeners[i].fn.call(listeners[i].context, ...args)
       }
     }
@@ -115,28 +99,31 @@ export class Events {
     return true
   }
 
-  on(event: EventName, fn: Function, context?: Context): Events {
+  public on<T extends EventNames<EventMap>>(event: T, fn: EventListener<EventMap, T>, context?: any) {
     return addListener(this, event, fn, context, false)
   }
 
-  once(event: EventName, fn: Function, context?: Context): Events {
+  public once<T extends EventNames<EventMap>>(event: T, fn: EventListener<EventMap, T>, context?: any) {
     return addListener(this, event, fn, context, true)
   }
 
-  removeListener(event: EventName, fn: Function, context: Context, once: Once) {
-    let evt = prefix ? prefix + event : event
-
-    if (!this._events[evt]) return this
+  removeListener<T extends EventNames<EventMap>>(
+    event: T,
+    fn?: EventListener<EventMap, T>,
+    context?: any,
+    once?: boolean
+  ) {
+    if (!this._events.has(event)) return this
     if (!fn) {
-      clearEvent(this, evt)
+      clearEvent(this, event)
       return this
     }
 
-    let listeners = this._events[evt]
+    let listeners = this._events.get(event)
 
     if (listeners.fn) {
       if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
-        clearEvent(this, evt)
+        clearEvent(this, event)
       }
     } else {
       for (var i = 0, events = [], length = listeners.length; i < length; i++) {
@@ -146,21 +133,18 @@ export class Events {
       }
 
       // Reset the array, or remove it completely if we have no more listeners.
-      if (events.length) this._events[evt] = events.length === 1 ? events[0] : events
-      else clearEvent(this, evt)
+      if (events.length) this._events.set(event, events.length === 1 ? events[0] : events)
+      else clearEvent(this, event)
     }
 
     return this
   }
 
-  removeAllListeners(event?: EventName): Events {
-    let evt
-
+  removeAllListeners(event?: EventNames<EventMap>) {
     if (event) {
-      evt = prefix ? prefix + event : event
-      if (this._events[evt]) clearEvent(this, evt)
+      if (this._events.delete(event)) clearEvent(this, event)
     } else {
-      this._events = new _Events()
+      this._events = new Map()
       this._eventsCount = 0
     }
 
@@ -177,3 +161,29 @@ export class Events {
     return this.on
   }
 }
+
+/** TESTING SECTION */
+
+// type Colors = 'red' | 'blue' | 'yellow'
+
+// interface EventMap {
+//   signal: () => void
+//   error: (err: string) => void
+//   something: (a: number, b: { colors?: Colors[] }, c: [number, number, string]) => void
+// }
+
+// const test = new Events<EventMap>()
+
+// test.on('something', (a, b, c) => {
+//   console.log(a, b.colors, c)
+// })
+
+// test.once('error', err => {
+//   console.log('error:', err)
+// })
+
+// console.log(test.eventNames())
+
+// test.emit('error', 'ok')
+// test.emit('error', 'failed')
+// test.emit('something', 1234, { colors: ['blue'] }, [3, 3, 'k'])

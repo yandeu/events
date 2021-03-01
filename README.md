@@ -24,18 +24,36 @@ https://unpkg.com/@yandeu/events/umd/events.es5.min.js
 ```ts
 const { Events } = require('@yandeu/events')
 
-// (experimental ECMAScript modules for Node.js)
+// (ECMAScript Modules for Node.js 15+)
 // import { Events } from '@yandeu/events/esm/index.mjs'
 
 const events = new Events()
 
 events.on('message', msg => {
-  console.log(`Got message: ${msg}`)
+  console.log(`Message: ${msg}`)
 })
 
 events.emit('message', 'Hello there!')
 
-// will print: Got message: Hello there!
+// will print: Message: Hello there!
+```
+
+## TypeScript
+
+```ts
+interface EventMap {
+  signal: () => void
+  error: (err: string) => void
+  something: (a: number, b: { color?: string }, c: [number, number, string]) => void
+}
+
+const events = new Events<EventMap>()
+
+events.on('something', (a, b, c) => {
+  console.log(a, b.color, c)
+})
+
+events.emit('something', 1, { color: 'blue' }, [2, 2, 'k'])
 ```
 
 ## License

@@ -94,7 +94,8 @@ describe('Events', function tests() {
     it('emits with context, multiple listeners (force loop)', function () {
       var e = new Events()
 
-      e.on(
+      // .addListener is an alias of .on
+      e.addListener(
         'foo',
         function (bar) {
           expect(this).toMatchObject({ foo: 'bar' })
@@ -345,7 +346,8 @@ describe('Events', function tests() {
       e.on('foo', function () {})
       e.on('foo', function () {})
 
-      expect(e.removeListener('foo')).toBe(e)
+      // .off is an alias of .removeListener
+      expect(e.off('foo')).toBe(e)
       expect(e.listeners('foo')).toMatchObject([])
     })
 

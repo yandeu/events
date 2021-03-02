@@ -1,4 +1,6 @@
 /**
+ * @package      npmjs.com/package/@yandeu/events (events.min.js)
+ *
  * @author       Arnout Kazemier (https://github.com/3rd-Eden)
  * @copyright    Copyright (c) 2014 Arnout Kazemier
  * @license      {@link https://github.com/primus/eventemitter3/blob/master/LICENSE|MIT}

@@ -41,6 +41,8 @@ events.emit('message', 'Hello there!')
 ## TypeScript
 
 ```ts
+import { Events } from '@yandeu/events'
+
 interface EventMap {
   signal: () => void
   error: (err: string) => void
@@ -54,6 +56,22 @@ events.on('something', (a, b, c) => {
 })
 
 events.emit('something', 1, { color: 'blue' }, [2, 2, 'k'])
+```
+
+```ts
+import type { EventListener } from '@yandeu/events'
+
+// typed listener
+const listener: EventListener<EventMap, 'error'> = err => {
+  console.log('err:', err)
+}
+
+// add listener
+events.on('error', listener)
+
+// remove listener
+// (once you don't need it anymore)
+events.removeListener('error', listener)
 ```
 
 ## License

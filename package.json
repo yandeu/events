@@ -1,6 +1,6 @@
 {
   "name": "@yandeu/events",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simplified and TypeScripted version of EventEmitter3@4.0.7",
   "type": "commonjs",
   "main": "./cjs/index.js",
@@ -20,6 +20,7 @@
     "url": "https://github.com/yandeu/events/issues"
   },
   "scripts": {
+    "prepareRelease": "npm install && npm run build",
     "start": "npm run dev",
     "dev": "npm run build && npm-run-all --parallel dev:*",
     "dev:tsc-cjs": "tsc --project tsconfig.cjs.json --watch",

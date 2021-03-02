@@ -10,6 +10,8 @@
  * @license      {@link https://github.com/yandeu/events/blob/master/LICENSE|MIT}
  */
 
+import { VERSION } from './version'
+
 export type ValidEventMap<T = any> = T extends {
   [P in keyof T]: (...args: any[]) => void
 }
@@ -52,6 +54,10 @@ const clearEvent = (emitter: Events<any>, event: any) => {
 }
 
 export class Events<EventMap extends ValidEventMap = any> {
+  static get VERSION() {
+    return VERSION
+  }
+
   _events: Map<EventNames<EventMap>, any> = new Map()
   _eventsCount = 0
 

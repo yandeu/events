@@ -38,6 +38,11 @@ events.emit('message', 'Hello there!')
 // will print: Message: Hello there!
 ```
 
+```ts
+// print the current version
+console.log('Events VERSION: ', Events.VERSION)
+```
+
 ## TypeScript
 
 ```ts

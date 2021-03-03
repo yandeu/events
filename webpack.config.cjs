@@ -8,6 +8,7 @@ module.exports = [
   return {
     mode: 'production',
     entry: './src/index.ts',
+    target: 'web',
     output: {
       filename: config.filename,
       path: path.resolve(__dirname, 'umd'),

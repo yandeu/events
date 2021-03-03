@@ -3,6 +3,9 @@
   "compilerOptions": {
     "outDir": "cjs",
     "target": "ES5",
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
   }
 }

@@ -24,8 +24,8 @@ https://unpkg.com/@yandeu/events/umd/events.es5.min.js
 ```ts
 const { Events } = require('@yandeu/events')
 
-// (ECMAScript Modules for Node.js 15+)
-// import { Events } from '@yandeu/events/esm/index.mjs'
+// or
+// import { Events } from '@yandeu/events'
 
 const events = new Events()
 

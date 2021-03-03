@@ -1,14 +1,17 @@
 /**
- * @description rename .js to .mjs
+ * @description rename .js to .mjs (or .cjs)
  */
 
 const fs = require('fs')
 const path = require('path')
 
-const dir = path.resolve(__dirname, '../esm')
+const newExtension = '.mjs'
+const directory = '../esm'
+
+const dir = path.resolve(__dirname, directory)
 
 const replaceName = fileName => {
-  return fileName.replace(/\.js$/, '.mjs').replace(/\.js\.map$/, '.mjs.map')
+  return fileName.replace(/\.js$/, newExtension).replace(/\.js\.map$/, newExtension + '.map')
 }
 
 const replaceReferences = (fileName, file) => {
@@ -17,7 +20,9 @@ const replaceReferences = (fileName, file) => {
   const reg1 = new RegExp(`${fileNameWithoutExtension}\.js\.map`)
   const reg2 = new RegExp(`${fileNameWithoutExtension}\.js`)
 
-  return file.replace(reg1, `${fileNameWithoutExtension}.mjs.map`).replace(reg2, `${fileNameWithoutExtension}.mjs`)
+  return file
+    .replace(reg1, `${fileNameWithoutExtension}${newExtension}.map`)
+    .replace(reg2, `${fileNameWithoutExtension}${newExtension}`)
 }
 
 fs.readdir(dir, (err, files) => {

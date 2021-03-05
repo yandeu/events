@@ -79,7 +79,7 @@ export class Events<EventMap extends ValidEventMap = any> {
   }
 
   public listenerCount(event: EventNames<EventMap>) {
-    let listeners = this._events.get(event)
+    const listeners = this._events.get(event)
 
     if (!listeners) return 0
     if (listeners.fn) return 1
@@ -89,14 +89,14 @@ export class Events<EventMap extends ValidEventMap = any> {
   public emit<T extends EventNames<EventMap>>(event: T, ...args: EventArgs<EventMap, T>) {
     if (!this._events.has(event)) return false
 
-    let listeners = this._events.get(event)
+    const listeners = this._events.get(event)
     let i
 
     if (listeners.fn) {
       if (listeners.once) this.removeListener(event, listeners.fn, undefined, true)
       return listeners.fn.call(listeners.context, ...args), true
     } else {
-      let length = listeners.length
+      const length = listeners.length
 
       for (i = 0; i < length; i++) {
         if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true)
@@ -127,7 +127,7 @@ export class Events<EventMap extends ValidEventMap = any> {
       return this
     }
 
-    let listeners = this._events.get(event)
+    const listeners = this._events.get(event)
 
     if (listeners.fn) {
       if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {

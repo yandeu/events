@@ -1,7 +1,7 @@
 {
   "name": "@yandeu/events",
   "version": "0.0.5",
-  "description": "Simplified and TypeScripted version of EventEmitter3@4.0.7",
+  "description": "⚡ Simplified and TypeScripted version of EventEmitter3@4.0.7",
   "type": "commonjs",
   "main": "./cjs/index.js",
   "types": "./cjs/index.d.ts",

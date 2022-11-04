@@ -18,7 +18,7 @@ export type ValidEventMap<T = any> = T extends {
   ? T
   : never
 
-export type Handler<T extends Object | ((...args: any[]) => R), R = any> = T
+export type Handler<T extends any | ((...args: any[]) => R), R = any> = T
 
 export type EventListener<T extends ValidEventMap, K extends EventNames<T>> = T extends string | symbol
   ? (...args: any[]) => void

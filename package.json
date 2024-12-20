@@ -34,9 +34,9 @@
     "build": "npm run prune && npm-run-all build:*",
     "build:version": "npm run version",
     "build:ts": "tsc --project tsconfig.json",
-    "build:bundle": "npx esbuild --bundle src/index.ts --minify --outfile=esm/bundle.min.js --format=esm",
+    "build:bundle": "npx esbuild --bundle src/index.ts --minify --outfile=bundle/bundle.min.js --format=esm",
     "version": "extract version /src/version.ts",
-    "prune": "rimraf lib cjs esm umd dist",
+    "prune": "rimraf lib cjs esm umd dist bundle",
     "prepublishOnly": "npm run build && npm test",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },

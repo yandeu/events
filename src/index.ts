@@ -10,7 +10,7 @@
  * @license      {@link https://github.com/yandeu/events/blob/master/LICENSE|MIT}
  */
 
-import { VERSION } from './version'
+import { VERSION } from './version.js'
 
 export type ValidEventMap<T = any> = T extends {
   [P in keyof T]: (...args: any[]) => void

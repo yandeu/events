@@ -1,7 +1,7 @@
+import { Events } from '../lib/index.js'
+
 describe('Events', function tests() {
   'use strict'
-
-  const { Events } = require('../cjs')
 
   describe('Events#emit', function () {
     it('should return false when there are not events to emit', function () {

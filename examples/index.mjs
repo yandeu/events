@@ -1,4 +1,4 @@
-import { Events } from '../cjs/index.js'
+import { Events } from '../lib/index.js'
 
 const events = new Events()
 

@@ -9,6 +9,10 @@ Simplified and TypeScripted version of EventEmitter3@4.0.7
 npm install @yandeu/events
 ```
 
+## Examples
+
+See [examples](/examples/).
+
 ## CDN
 
 ```console

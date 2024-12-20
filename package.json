@@ -1,6 +1,6 @@
 {
   "name": "@yandeu/events",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "⚡ Simplified and TypeScripted version of EventEmitter3@4.0.7",
   "type": "module",
   "main": "./lib/index.js",
